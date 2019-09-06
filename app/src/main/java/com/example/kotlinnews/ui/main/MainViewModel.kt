@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlinnews.model.NewsItem
-import com.example.kotlinnews.network.NetworkClient
+import com.example.kotlinnews.network.INetworkClient
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val network: INetworkClient) : ViewModel() {
 
     private lateinit var news: MutableLiveData<List<NewsItem>>
 
@@ -41,7 +41,7 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                news.value = NetworkClient.getNews().data.children
+                news.value = network.getNews().data.children
             } catch (e: Exception) {
                 showError.value = true
                 e.printStackTrace()
